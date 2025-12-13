@@ -8,12 +8,21 @@ public class HomeWindow {
         home.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         home.setSize(300, 200);
 
-        JButton inscrire = new JButton("S'inscrire");
-        JButton connecter = new JButton("Se connecter");
+        
+        JRadioButton option1=new JRadioButton("register");
+        JRadioButton option2=new JRadioButton("login");
+        ButtonGroup group =new ButtonGroup();
+        group.add(option1);
+        group.add(option2);
+        home.add(option1);
+        home.add(option2);
+        
+        JButton okButton=new JButton();
+        JButton cancelButton =new JButton();
+        home.add(okButton);
+        home.add(cancelButton);
 
-        home.add(inscrire);
-        home.add(connecter);
-
+        
         home.setVisible(true);
     }
 }
