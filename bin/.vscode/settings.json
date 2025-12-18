@@ -1,0 +1,8 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/ojdbc17.jar"
+    ],
+    "java.project.outputPath": "bin"
+}
+
+    
