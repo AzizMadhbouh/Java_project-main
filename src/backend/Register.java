@@ -1,4 +1,4 @@
-package backend;
+package src.backend;
 public class Register {
     String nom;
     String prenom;

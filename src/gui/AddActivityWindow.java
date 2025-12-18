@@ -1,4 +1,4 @@
-package GUI;
+package src.gui;
 import javax.swing.*;
 public class AddActivityWindow {
     public AddActivityWindow(){

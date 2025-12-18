@@ -1,6 +1,6 @@
 
 // File: GUI/HomeWindow.java
-package GUI;
+package src.gui;
 
 import javax.swing.*;
 import java.awt.*;

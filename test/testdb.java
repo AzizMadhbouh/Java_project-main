@@ -1,4 +1,5 @@
-import src.DBConnection;
+package test;
+import src.backend.dao.DBConnection;
 
 public class testdb {
       public static void main(String[] args) {

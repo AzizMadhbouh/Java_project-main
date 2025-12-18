@@ -1,4 +1,4 @@
-package GUI;
+package src.gui;
 
 public class ViewUsersWindow {
     

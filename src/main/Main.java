@@ -1,4 +1,5 @@
-import GUI.*;
+package src.main;
+import src.gui.*;
 public class Main{
     public static void main(String[] args){
         HomeWindow log=new HomeWindow();
