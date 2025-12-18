@@ -2,70 +2,60 @@ package src.gui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class ClubPresidentWindow {
     public ClubPresidentWindow() {
         JFrame frame = new JFrame("President Dashboard");
-        frame.setSize(420, 420);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        // Main panel with buttons
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayout(5, 1, 10, 10)); // 5 buttons vertically
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50)); // padding
+        JPanel main = new JPanel(new GridBagLayout());
+        main.setBackground(new Color(240, 244, 248));
+
+        JPanel card = new JPanel();
+        card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
+        card.setBackground(Color.WHITE);
+        card.setPreferredSize(new Dimension(400, 420));
+        card.setBorder(BorderFactory.createEmptyBorder(24, 24, 24, 24));
+
+        JLabel title = new JLabel("President Dashboard");
+        title.setFont(new Font("SansSerif", Font.BOLD, 20));
+        title.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JButton seeEventsButton = new JButton("See Events of Joined Clubs");
+        GuiUtils.stylePrimaryButton(seeEventsButton);
+        seeEventsButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+
         JButton joinClubButton = new JButton("Join a Club");
+        GuiUtils.styleSecondaryButton(joinClubButton);
+        joinClubButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+
         JButton quitClubButton = new JButton("Quit a Club");
+        GuiUtils.styleSecondaryButton(quitClubButton);
+        quitClubButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+
         JButton seeMembersButton = new JButton("See Members of My Club");
+        GuiUtils.styleSecondaryButton(seeMembersButton);
+        seeMembersButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+
         JButton addActivityButton = new JButton("Add Activity");
+        GuiUtils.stylePrimaryButton(addActivityButton);
+        addActivityButton.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        mainPanel.add(seeEventsButton);
-        mainPanel.add(joinClubButton);
-        mainPanel.add(quitClubButton);
-        mainPanel.add(seeMembersButton);
-        mainPanel.add(addActivityButton);
+        card.add(title);
+        card.add(Box.createRigidArea(new Dimension(0, 12)));
+        card.add(seeEventsButton);
+        card.add(Box.createRigidArea(new Dimension(0, 8)));
+        card.add(joinClubButton);
+        card.add(Box.createRigidArea(new Dimension(0, 8)));
+        card.add(quitClubButton);
+        card.add(Box.createRigidArea(new Dimension(0, 8)));
+        card.add(seeMembersButton);
+        card.add(Box.createRigidArea(new Dimension(0, 8)));
+        card.add(addActivityButton);
 
-        frame.add(mainPanel, BorderLayout.CENTER);
-
-        seeEventsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "See events clicked", "Info", JOptionPane.INFORMATION_MESSAGE);
-            }
-        });
-
-        joinClubButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Join club clicked", "Info", JOptionPane.INFORMATION_MESSAGE);
-            }
-        });
-
-        quitClubButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Quit club clicked", "Info", JOptionPane.INFORMATION_MESSAGE);
-            }
-        });
-
-        seeMembersButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "See members clicked", "Info", JOptionPane.INFORMATION_MESSAGE);
-            }
-        });
-
-        addActivityButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new AddActivityWindow();
-            }
-        });
-
+        main.add(card);
+        frame.add(main);
         frame.setVisible(true);
     }
 }

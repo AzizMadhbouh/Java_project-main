@@ -2,66 +2,48 @@ package src.gui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class NormalUserWindow {
     public NormalUserWindow() {
         JFrame frame = new JFrame("User Dashboard");
-        frame.setSize(420, 360);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        // Main panel with buttons
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayout(4, 1, 10, 10)); // 4 buttons vertically
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50)); // padding
+        JPanel main = new JPanel(new GridBagLayout());
+        main.setBackground(new Color(240, 244, 248));
+
+        JPanel card = new JPanel();
+        card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
+        card.setBackground(Color.WHITE);
+        card.setPreferredSize(new Dimension(400, 360));
+        card.setBorder(BorderFactory.createEmptyBorder(24, 24, 24, 24));
+
+        JLabel title = new JLabel("User Dashboard");
+        title.setFont(new Font("SansSerif", Font.BOLD, 20));
+        title.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JButton seeEventsButton = new JButton("See Events of Joined Clubs");
+        GuiUtils.stylePrimaryButton(seeEventsButton);
+        seeEventsButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+
         JButton joinClubButton = new JButton("Join a Club");
+        GuiUtils.styleSecondaryButton(joinClubButton);
+        joinClubButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+
         JButton quitClubButton = new JButton("Quit a Club");
+        GuiUtils.styleSecondaryButton(quitClubButton);
+        quitClubButton.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        mainPanel.add(seeEventsButton);
-        mainPanel.add(joinClubButton);
-        mainPanel.add(quitClubButton);
+        card.add(title);
+        card.add(Box.createRigidArea(new Dimension(0, 14)));
+        card.add(seeEventsButton);
+        card.add(Box.createRigidArea(new Dimension(0, 8)));
+        card.add(joinClubButton);
+        card.add(Box.createRigidArea(new Dimension(0, 8)));
+        card.add(quitClubButton);
 
-        // "Create your own club" as a link-like label
-        JLabel createClubLabel = new JLabel("<HTML><U>Create Your Own Club</U></HTML>");
-        createClubLabel.setForeground(Color.BLUE);
-        createClubLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        createClubLabel.setCursor(new Cursor(Cursor.HAND_CURSOR)); // looks clickable
-
-        frame.add(mainPanel, BorderLayout.CENTER);
-        frame.add(createClubLabel, BorderLayout.SOUTH);
-
-        // Listeners
-        seeEventsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Feature not implemented yet", "Info", JOptionPane.INFORMATION_MESSAGE);
-            }
-        });
-
-        joinClubButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Join club clicked", "Info", JOptionPane.INFORMATION_MESSAGE);
-            }
-        });
-
-        quitClubButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Quit club clicked", "Info", JOptionPane.INFORMATION_MESSAGE);
-            }
-        });
-
-        createClubLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                JOptionPane.showMessageDialog(frame, "Create club flow not implemented", "Info", JOptionPane.INFORMATION_MESSAGE);
-            }
-        });
-
+        main.add(card);
+        frame.add(main);
         frame.setVisible(true);
     }
 }

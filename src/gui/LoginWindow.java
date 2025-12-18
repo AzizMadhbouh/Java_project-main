@@ -1,100 +1,65 @@
 package src.gui;
-
-import src.backend.Login;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class LoginWindow {
-    private JFrame frame;
-    public LoginWindow() {
-        frame = new JFrame("Login");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(500, 600);
-        frame.setLocationRelativeTo(null);
+    public LoginWindow(){
+        JFrame frame = new JFrame("Login");
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        JPanel mainPanel = new JPanel();
-        mainPanel.setBackground(new Color(41, 128, 185));
-        mainPanel.setLayout(new GridBagLayout());
+        JPanel main = new JPanel(new GridBagLayout());
+        main.setBackground(new Color(240, 244, 248));
+        frame.add(main);
 
-        JPanel loginCard = new JPanel();
-        loginCard.setPreferredSize(new Dimension(320, 400));
-        loginCard.setBackground(Color.WHITE);
-        loginCard.setLayout(new BoxLayout(loginCard, BoxLayout.Y_AXIS));
-        loginCard.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+        JPanel card = new JPanel();
+        card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
+        card.setBackground(Color.WHITE);
+        card.setPreferredSize(new Dimension(400, 450));
+        card.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
 
         JLabel title = new JLabel("Login");
-        title.setFont(new Font("SansSerif", Font.BOLD, 26));
-        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title.setFont(new Font("SansSerif", Font.BOLD, 28));
+        title.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JTextField userField = new JTextField();
-        userField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 45));
-        userField.setBorder(BorderFactory.createTitledBorder("Username"));
+        JLabel emailLabel = new JLabel("Email:");
+        emailLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
+        emailLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JTextField emailField = new JTextField();
+        emailField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        emailField.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JLabel passLabel = new JLabel("Password:");
+        passLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
+        passLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JPasswordField passField = new JPasswordField();
-        passField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 45));
-        passField.setBorder(BorderFactory.createTitledBorder("Password"));
+        passField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        passField.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JButton loginBtn = new JButton("CONTINUE");
-        loginBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-        loginBtn.setBackground(new Color(41, 128, 185));
-        loginBtn.setForeground(Color.WHITE);
-        loginBtn.setOpaque(true);
-        loginBtn.setBorderPainted(false);
-        loginBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        JLabel forgotLink = new JLabel("Forgot password?");
+        forgotLink.setForeground(new Color(59, 130, 246));
+        forgotLink.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        forgotLink.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JLabel registerLink = new JLabel("Don't have an account?");
-        registerLink.setAlignmentX(Component.CENTER_ALIGNMENT);
-        registerLink.setForeground(new Color(41, 128, 185));
-        registerLink.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        card.add(title);
+        card.add(Box.createRigidArea(new Dimension(0, 30)));
 
-        registerLink.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                frame.dispose();
-                new RegisterWindow();
-            }
-        });
+        card.add(emailLabel);
+        card.add(Box.createRigidArea(new Dimension(0, 8)));
+        card.add(emailField);
+        card.add(Box.createRigidArea(new Dimension(0, 20)));
 
-        loginBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String user = userField.getText();
-                String pass = new String(passField.getPassword());
-                boolean ok = Login.authenticate(user, pass);
-                if (ok) {
-                    JOptionPane.showMessageDialog(frame, "Login successful", "Success", JOptionPane.INFORMATION_MESSAGE);
-                    frame.dispose();
-                    new NormalUserWindow();
-                } else {
-                    JOptionPane.showMessageDialog(frame, "Invalid credentials", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
+        card.add(passLabel);
+        card.add(Box.createRigidArea(new Dimension(0, 8)));
+        card.add(passField);
+        card.add(Box.createRigidArea(new Dimension(0, 15)));
 
-        loginCard.add(title);
-        loginCard.add(Box.createRigidArea(new Dimension(0, 40)));
-        loginCard.add(userField);
-        loginCard.add(Box.createRigidArea(new Dimension(0, 15)));
-        loginCard.add(passField);
-        loginCard.add(Box.createRigidArea(new Dimension(0, 40)));
-        loginCard.add(loginBtn);
-        loginCard.add(Box.createRigidArea(new Dimension(0, 20)));
-        loginCard.add(registerLink);
+        card.add(forgotLink);
 
-        mainPanel.add(loginCard);
-        frame.add(mainPanel);
-    }
+        main.add(card);
 
-    public void show() {
         frame.setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        LoginWindow window = new LoginWindow();
-        window.show();
     }
 }
