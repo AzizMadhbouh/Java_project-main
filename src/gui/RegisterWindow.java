@@ -43,6 +43,11 @@ public class RegisterWindow {
         emailField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         emailField.setBorder(BorderFactory.createTitledBorder("E-mail"));
 
+        String[] roles = { "Normal User", "Club President" };
+        JComboBox<String> roleBox = new JComboBox<>(roles);
+        roleBox.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        roleBox.setBorder(BorderFactory.createTitledBorder("Role"));
+
         JPanel btnRow = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton ok = new JButton("OK");
         JButton cancel = new JButton("Cancel");
@@ -57,6 +62,8 @@ public class RegisterWindow {
         card.add(firstNameField);
         card.add(Box.createRigidArea(new Dimension(0, 8)));
         card.add(emailField);
+        card.add(Box.createRigidArea(new Dimension(0, 8)));
+        card.add(roleBox);
         card.add(Box.createRigidArea(new Dimension(0, 16)));
         card.add(btnRow);
 
@@ -71,12 +78,20 @@ public class RegisterWindow {
                 r.lastName = nameField.getText();
                 r.firstName = firstNameField.getText();
                 r.email = emailField.getText();
+                r.role = (String) roleBox.getSelectedItem();
                 boolean ok = r.save();
                 if (ok) {
-                    JOptionPane.showMessageDialog(frame, "Registered successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    String msg = "Registered successfully.\n" +
+                            "Username: " + r.email + "\n" +
+                            "Password: " + r.generatedPassword;
+                    JTextArea textArea = new JTextArea(msg);
+                    textArea.setEditable(false);
+                    JOptionPane.showMessageDialog(frame, textArea, "Success", JOptionPane.INFORMATION_MESSAGE);
                     frame.dispose();
+                    new LoginWindow().show();
                 } else {
-                    JOptionPane.showMessageDialog(frame, "Please enter valid information", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(frame, "Please enter valid information or existing email", "Error",
+                            JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -91,4 +106,3 @@ public class RegisterWindow {
         frame.setVisible(true);
     }
 }
-

@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 
 public class LoginWindow {
     private JFrame frame;
+
     public LoginWindow() {
         frame = new JFrame("Login");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -64,11 +65,16 @@ public class LoginWindow {
             public void actionPerformed(ActionEvent e) {
                 String user = userField.getText();
                 String pass = new String(passField.getPassword());
-                boolean ok = Login.authenticate(user, pass);
-                if (ok) {
-                    JOptionPane.showMessageDialog(frame, "Login successful", "Success", JOptionPane.INFORMATION_MESSAGE);
+                String role = Login.authenticate(user, pass);
+                if (role != null) {
+                    JOptionPane.showMessageDialog(frame, "Login successful", "Success",
+                            JOptionPane.INFORMATION_MESSAGE);
                     frame.dispose();
-                    new NormalUserWindow();
+                    if ("Club President".equalsIgnoreCase(role)) {
+                        new ClubPresidentWindow();
+                    } else {
+                        new NormalUserWindow();
+                    }
                 } else {
                     JOptionPane.showMessageDialog(frame, "Invalid credentials", "Error", JOptionPane.ERROR_MESSAGE);
                 }
