@@ -1,11 +1,19 @@
 package src.backend;
+
 public class Register {
-    String nom;
-    String prenom;
-    String mail;
-    String club;
-    void ok(){
+    public String firstName;
+    public String lastName;
+    public String email;
+    public String club;
+
+    public Register() {}
+
+    public boolean save() {
+        if (firstName == null || lastName == null || email == null) return false;
+        return email.contains("@");
     }
-    void annuler(){
+
+    public void cancel() {
+        // placeholder for cancel action
     }
 }

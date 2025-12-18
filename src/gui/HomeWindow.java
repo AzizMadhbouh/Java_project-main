@@ -4,70 +4,97 @@ package src.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class HomeWindow {
 
-    private JFrame home;
+    private JFrame frame;
 
     public HomeWindow() {
-        home = new JFrame("Welcome");
-        home.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        home.setSize(360, 220);
-        home.setLocationRelativeTo(null); // center
+        frame = new JFrame("Welcome");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(520, 620);
+        frame.setLocationRelativeTo(null);
 
-        JPanel main = new JPanel(new GridBagLayout());
-        main.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        JPanel mainPanel = new JPanel();
+        mainPanel.setBackground(new Color(41, 128, 185));
+        mainPanel.setLayout(new GridBagLayout());
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.insets = new Insets(5, 5, 5, 5);
+        JPanel card = new JPanel();
+        card.setPreferredSize(new Dimension(360, 420));
+        card.setBackground(Color.WHITE);
+        card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
+        card.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
-        // Title
-        JLabel title = new JLabel("Welcome");
-        title.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        title.setHorizontalAlignment(SwingConstants.CENTER);
+        JLabel title = new JLabel("Welcome to ClubApp");
+        title.setFont(new Font("SansSerif", Font.BOLD, 26));
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        gbc.gridy = 0;
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
-        main.add(title, gbc);
+        JLabel subtitle = new JLabel("Manage clubs and activities");
+        subtitle.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        subtitle.setForeground(Color.DARK_GRAY);
+        subtitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Radio buttons
-        JRadioButton login = new JRadioButton("Login");
-        JRadioButton register = new JRadioButton("Register");
+        card.add(title);
+        card.add(Box.createRigidArea(new Dimension(0, 12)));
+        card.add(subtitle);
+        card.add(Box.createRigidArea(new Dimension(0, 30)));
 
-        ButtonGroup group = new ButtonGroup();
-        group.add(login);
-        group.add(register);
-        login.setSelected(true);
+        JButton loginBtn = new JButton("LOGIN");
+        stylePrimaryButton(loginBtn);
+        loginBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        loginBtn.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
 
-        gbc.gridwidth = 1;
-        gbc.anchor = GridBagConstraints.WEST;
+        JButton registerBtn = new JButton("REGISTER");
+        stylePrimaryButton(registerBtn);
+        registerBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        registerBtn.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
 
-        gbc.gridy = 1;
-        main.add(login, gbc);
+        card.add(loginBtn);
+        card.add(Box.createRigidArea(new Dimension(0, 16)));
+        card.add(registerBtn);
+        card.add(Box.createRigidArea(new Dimension(0, 20)));
 
-        gbc.gridy = 2;
-        main.add(register, gbc);
+        JButton exitBtn = new JButton("Exit");
+        exitBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        card.add(exitBtn);
 
-        // Buttons panel
-        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton okButton = new JButton("OK");
-        JButton cancelButton = new JButton("Cancel");
+        mainPanel.add(card);
+        frame.add(mainPanel);
 
-        buttons.add(okButton);
-        buttons.add(cancelButton);
+        loginBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                LoginWindow lw = new LoginWindow();
+                lw.show();
+            }
+        });
 
-        gbc.gridy = 3;
-        gbc.gridx = 0;
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.EAST;
-        gbc.insets = new Insets(15, 5, 5, 5);
-        main.add(buttons, gbc);
+        registerBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                new RegisterWindow();
+            }
+        });
 
-        home.setContentPane(main);
-        home.setVisible(true);
+        exitBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+            }
+        });
+
+        frame.setVisible(true);
+    }
+
+    private void stylePrimaryButton(JButton b) {
+        b.setBackground(new Color(41, 128, 185));
+        b.setForeground(Color.WHITE);
+        b.setOpaque(true);
+        b.setBorderPainted(false);
+        b.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 }

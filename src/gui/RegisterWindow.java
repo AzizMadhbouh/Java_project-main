@@ -1,75 +1,94 @@
 package src.gui;
 
+import src.backend.Register;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class RegisterWindow {
 
-    private JFrame register;
+    private JFrame frame;
 
     public RegisterWindow() {
-        register = new JFrame("Register");
-        register.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        register.setSize(420, 260);
-        register.setLocationRelativeTo(null);
+        frame = new JFrame("Register");
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setSize(420, 380);
+        frame.setLocationRelativeTo(null);
 
-        JPanel main = new JPanel(new GridBagLayout());
-        main.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        JPanel mainPanel = new JPanel();
+        mainPanel.setBackground(new Color(41, 128, 185));
+        mainPanel.setLayout(new GridBagLayout());
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(6, 6, 6, 6);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        JPanel card = new JPanel();
+        card.setPreferredSize(new Dimension(340, 300));
+        card.setBackground(Color.WHITE);
+        card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
+        card.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // ===== Labels & Fields =====
-        JLabel lblName = new JLabel("Name:");
-        JTextField txtName = new JTextField(20);
+        JLabel title = new JLabel("Register");
+        title.setFont(new Font("SansSerif", Font.BOLD, 22));
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel lblFirstName = new JLabel("First Name:");
-        JTextField txtFirstName = new JTextField(20);
+        JTextField nameField = new JTextField();
+        nameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        nameField.setBorder(BorderFactory.createTitledBorder("Name"));
 
-        JLabel lblEmail = new JLabel("E-mail:");
-        JTextField txtEmail = new JTextField(20);
+        JTextField firstNameField = new JTextField();
+        firstNameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        firstNameField.setBorder(BorderFactory.createTitledBorder("First Name"));
 
-        // Row 0
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        main.add(lblName, gbc);
+        JTextField emailField = new JTextField();
+        emailField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        emailField.setBorder(BorderFactory.createTitledBorder("E-mail"));
 
-        gbc.gridx = 1;
-        main.add(txtName, gbc);
+        JPanel btnRow = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton ok = new JButton("OK");
+        JButton cancel = new JButton("Cancel");
+        btnRow.setOpaque(false);
+        btnRow.add(ok);
+        btnRow.add(cancel);
 
-        // Row 1
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        main.add(lblFirstName, gbc);
+        card.add(title);
+        card.add(Box.createRigidArea(new Dimension(0, 16)));
+        card.add(nameField);
+        card.add(Box.createRigidArea(new Dimension(0, 8)));
+        card.add(firstNameField);
+        card.add(Box.createRigidArea(new Dimension(0, 8)));
+        card.add(emailField);
+        card.add(Box.createRigidArea(new Dimension(0, 16)));
+        card.add(btnRow);
 
-        gbc.gridx = 1;
-        main.add(txtFirstName, gbc);
+        mainPanel.add(card);
+        frame.add(mainPanel);
 
-        // Row 2
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        main.add(lblEmail, gbc);
+        // Listeners
+        ok.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Register r = new Register();
+                r.lastName = nameField.getText();
+                r.firstName = firstNameField.getText();
+                r.email = emailField.getText();
+                boolean ok = r.save();
+                if (ok) {
+                    JOptionPane.showMessageDialog(frame, "Registered successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    frame.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Please enter valid information", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
 
-        gbc.gridx = 1;
-        main.add(txtEmail, gbc);
+        cancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+            }
+        });
 
-        // ===== Buttons =====
-        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton okButton = new JButton("OK");
-        JButton cancelButton = new JButton("Cancel");
-
-        buttons.add(okButton);
-        buttons.add(cancelButton);
-
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        gbc.gridwidth = 2;
-        gbc.insets = new Insets(15, 6, 6, 6);
-        main.add(buttons, gbc);
-
-        register.setContentPane(main);
-        register.setVisible(true);
+        frame.setVisible(true);
     }
 }
 

@@ -2,11 +2,13 @@ package src.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class NormalUserWindow {
     public NormalUserWindow() {
         JFrame frame = new JFrame("User Dashboard");
-        frame.setSize(400, 350);
+        frame.setSize(420, 360);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
@@ -31,6 +33,34 @@ public class NormalUserWindow {
 
         frame.add(mainPanel, BorderLayout.CENTER);
         frame.add(createClubLabel, BorderLayout.SOUTH);
+
+        // Listeners
+        seeEventsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(frame, "Feature not implemented yet", "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
+        joinClubButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(frame, "Join club clicked", "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
+        quitClubButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(frame, "Quit club clicked", "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
+        createClubLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JOptionPane.showMessageDialog(frame, "Create club flow not implemented", "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
 
         frame.setVisible(true);
     }

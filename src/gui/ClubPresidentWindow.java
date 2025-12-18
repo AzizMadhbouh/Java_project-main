@@ -2,11 +2,13 @@ package src.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ClubPresidentWindow {
     public ClubPresidentWindow() {
         JFrame frame = new JFrame("President Dashboard");
-        frame.setSize(400, 400);
+        frame.setSize(420, 420);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
@@ -28,6 +30,41 @@ public class ClubPresidentWindow {
         mainPanel.add(addActivityButton);
 
         frame.add(mainPanel, BorderLayout.CENTER);
+
+        seeEventsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(frame, "See events clicked", "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
+        joinClubButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(frame, "Join club clicked", "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
+        quitClubButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(frame, "Quit club clicked", "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
+        seeMembersButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(frame, "See members clicked", "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
+        addActivityButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new AddActivityWindow();
+            }
+        });
 
         frame.setVisible(true);
     }

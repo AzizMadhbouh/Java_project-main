@@ -1,63 +1,100 @@
 package src.gui;
 
+import src.backend.Login;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class LoginWindow {
-
-    private JFrame loginFrame;
-
+    private JFrame frame;
     public LoginWindow() {
-        loginFrame = new JFrame("Login");
-        loginFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        loginFrame.setSize(380, 220);
-        loginFrame.setLocationRelativeTo(null);
+        frame = new JFrame("Login");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(500, 600);
+        frame.setLocationRelativeTo(null);
 
-        JPanel main = new JPanel(new GridBagLayout());
-        main.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        JPanel mainPanel = new JPanel();
+        mainPanel.setBackground(new Color(41, 128, 185));
+        mainPanel.setLayout(new GridBagLayout());
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(6, 6, 6, 6);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        JPanel loginCard = new JPanel();
+        loginCard.setPreferredSize(new Dimension(320, 400));
+        loginCard.setBackground(Color.WHITE);
+        loginCard.setLayout(new BoxLayout(loginCard, BoxLayout.Y_AXIS));
+        loginCard.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
-        // ===== Fields =====
-        JLabel lblUsername = new JLabel("Username:");
-        JTextField txtUsername = new JTextField(20);
+        JLabel title = new JLabel("Login");
+        title.setFont(new Font("SansSerif", Font.BOLD, 26));
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel lblPassword = new JLabel("Password:");
-        JPasswordField txtPassword = new JPasswordField(20);
+        JTextField userField = new JTextField();
+        userField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 45));
+        userField.setBorder(BorderFactory.createTitledBorder("Username"));
 
-        // Row 0 - Username
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        main.add(lblUsername, gbc);
+        JPasswordField passField = new JPasswordField();
+        passField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 45));
+        passField.setBorder(BorderFactory.createTitledBorder("Password"));
 
-        gbc.gridx = 1;
-        main.add(txtUsername, gbc);
+        JButton loginBtn = new JButton("CONTINUE");
+        loginBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        loginBtn.setBackground(new Color(41, 128, 185));
+        loginBtn.setForeground(Color.WHITE);
+        loginBtn.setOpaque(true);
+        loginBtn.setBorderPainted(false);
+        loginBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // Row 1 - Password
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        main.add(lblPassword, gbc);
+        JLabel registerLink = new JLabel("Don't have an account?");
+        registerLink.setAlignmentX(Component.CENTER_ALIGNMENT);
+        registerLink.setForeground(new Color(41, 128, 185));
+        registerLink.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        gbc.gridx = 1;
-        main.add(txtPassword, gbc);
+        registerLink.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                frame.dispose();
+                new RegisterWindow();
+            }
+        });
 
-        // ===== Buttons =====
-        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton okButton = new JButton("OK");
-        JButton cancelButton = new JButton("Cancel");
+        loginBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String user = userField.getText();
+                String pass = new String(passField.getPassword());
+                boolean ok = Login.authenticate(user, pass);
+                if (ok) {
+                    JOptionPane.showMessageDialog(frame, "Login successful", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    frame.dispose();
+                    new NormalUserWindow();
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Invalid credentials", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
 
-        buttons.add(okButton);
-        buttons.add(cancelButton);
+        loginCard.add(title);
+        loginCard.add(Box.createRigidArea(new Dimension(0, 40)));
+        loginCard.add(userField);
+        loginCard.add(Box.createRigidArea(new Dimension(0, 15)));
+        loginCard.add(passField);
+        loginCard.add(Box.createRigidArea(new Dimension(0, 40)));
+        loginCard.add(loginBtn);
+        loginCard.add(Box.createRigidArea(new Dimension(0, 20)));
+        loginCard.add(registerLink);
 
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.gridwidth = 2;
-        gbc.insets = new Insets(15, 6, 6, 6);
-        main.add(buttons, gbc);
+        mainPanel.add(loginCard);
+        frame.add(mainPanel);
+    }
 
-        loginFrame.setContentPane(main);
-        loginFrame.setVisible(true);
+    public void show() {
+        frame.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        LoginWindow window = new LoginWindow();
+        window.show();
     }
 }
