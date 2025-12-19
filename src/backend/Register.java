@@ -22,28 +22,62 @@ public class Register {
         if (firstName == null || lastName == null || email == null)
             return false;
 
-        String insertMemberSql = "INSERT INTO members (first_name, last_name, email, club, role) VALUES (?, ?, ?, ?, ?)";
-        String insertUserSql = "INSERT INTO users (username, password) VALUES (?, ?)";
+        String standardizedEmail = email.trim().toLowerCase();
+
+        // Check if user already exists to avoid ORA-00001
+        String checkSql = "SELECT 1 FROM users WHERE LOWER(TRIM(username)) = LOWER(TRIM(?)) " +
+                "UNION " +
+                "SELECT 1 FROM members WHERE LOWER(TRIM(email)) = LOWER(TRIM(?))";
 
         Connection conn = null;
         try {
             conn = DBConnection.getConnection();
+            try (PreparedStatement checkPstmt = conn.prepareStatement(checkSql)) {
+                checkPstmt.setString(1, standardizedEmail);
+                checkPstmt.setString(2, standardizedEmail);
+                try (java.sql.ResultSet rs = checkPstmt.executeQuery()) {
+                    if (rs.next()) {
+                        System.out.println("Registration failed: User already exists for email " + standardizedEmail);
+                        return false;
+                    }
+                }
+            }
+
             conn.setAutoCommit(false); // Start transaction
 
-            // 1. Insert Member
+            String insertMemberSql = "INSERT INTO members (first_name, last_name, email) VALUES (?, ?, ?)";
+            String insertUserSql = "INSERT INTO users (username, password) VALUES (?, ?)";
+
+            // 1. Insert Member (with clubs_joined = 0 initially, will be incremented)
             try (PreparedStatement MemberPstmt = conn.prepareStatement(insertMemberSql)) {
                 MemberPstmt.setString(1, firstName);
                 MemberPstmt.setString(2, lastName);
-                MemberPstmt.setString(3, email);
-                MemberPstmt.setString(4, club);
-                MemberPstmt.setString(5, role);
-                MemberPstmt.executeUpdate();
+                MemberPstmt.setString(3, standardizedEmail);
+                MemberPstmt.executeUpdate(); // role is gone, clubs_joined defaults to 0
+            }
+
+            // 1b. Insert into member_clubs (with role 'Normal User') ONLY if a club is
+            // specified
+            if (club != null && !club.trim().isEmpty()) {
+                String insertMemberClubSql = "INSERT INTO member_clubs (email, club_name, role) VALUES (?, ?, 'Normal User')";
+                try (PreparedStatement mcPstmt = conn.prepareStatement(insertMemberClubSql)) {
+                    mcPstmt.setString(1, standardizedEmail);
+                    mcPstmt.setString(2, club.trim());
+                    mcPstmt.executeUpdate();
+                }
+
+                // 1c. Increment clubs_joined to 1
+                String updateCountSql = "UPDATE members SET clubs_joined = 1 + clubs_joined WHERE LOWER(TRIM(email)) = LOWER(TRIM(?))";
+                try (PreparedStatement countPstmt = conn.prepareStatement(updateCountSql)) {
+                    countPstmt.setString(1, email);
+                    countPstmt.executeUpdate();
+                }
             }
 
             // 2. Generate Password and Create User
             generatedPassword = generateRandomPassword();
             try (PreparedStatement userPstmt = conn.prepareStatement(insertUserSql)) {
-                userPstmt.setString(1, email); // Username is email
+                userPstmt.setString(1, standardizedEmail); // Username is lowercase email
                 userPstmt.setString(2, generatedPassword);
                 userPstmt.executeUpdate();
             }

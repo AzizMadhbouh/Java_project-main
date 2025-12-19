@@ -63,7 +63,7 @@ public class LoginWindow {
         loginBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String user = userField.getText();
+                String user = userField.getText().trim();
                 String pass = new String(passField.getPassword());
                 String role = Login.authenticate(user, pass);
                 if (role != null) {
@@ -71,9 +71,9 @@ public class LoginWindow {
                             JOptionPane.INFORMATION_MESSAGE);
                     frame.dispose();
                     if ("Club President".equalsIgnoreCase(role)) {
-                        new ClubPresidentWindow();
+                        new ClubPresidentWindow(user);
                     } else {
-                        new NormalUserWindow();
+                        new NormalUserWindow(user);
                     }
                 } else {
                     JOptionPane.showMessageDialog(frame, "Invalid credentials", "Error", JOptionPane.ERROR_MESSAGE);

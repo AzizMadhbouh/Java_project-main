@@ -11,7 +11,12 @@ public class Login {
         if (user == null || pass == null)
             return null;
 
-        String sql = "SELECT m.role FROM users u JOIN members m ON u.username = m.email WHERE u.username = ? AND u.password = ?";
+        // Query roles from member_clubs, prioritizing 'Club President'
+        // Use LEFT JOIN to allow login even if user has joined 0 clubs
+        String sql = "SELECT mc.role FROM users u " +
+                "LEFT JOIN member_clubs mc ON LOWER(TRIM(u.username)) = LOWER(TRIM(mc.email)) " +
+                "WHERE LOWER(TRIM(u.username)) = LOWER(TRIM(?)) AND u.password = ? " +
+                "ORDER BY CASE WHEN mc.role = 'Club President' THEN 1 ELSE 2 END ASC";
         try (java.sql.Connection conn = src.backend.dao.DBConnection.getConnection();
                 java.sql.PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -20,7 +25,8 @@ public class Login {
 
             java.sql.ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return rs.getString("role");
+                String role = rs.getString("role");
+                return (role != null) ? role : "Normal User";
             }
             return null;
 
